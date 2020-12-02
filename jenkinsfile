@@ -1,0 +1,14 @@
+node('master'){
+    stage('git'){
+        git 'https://github.com/pkgangisetti/game-of-life.git'
+}
+    stage('build'){
+        sh 'mvn clean package'
+    }
+    stage('test results'){
+        junit 'gameoflife-web/surefire-reports/*.xml'
+    }
+    stage('archive artifacts'){
+        archiveArtifacts artifacts: 'gameoflife-web/target/*.war', followSymlinks: false
+    }
+}
