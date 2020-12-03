@@ -1,5 +1,5 @@
 pipeline{
-    agent {label 'master'
+    agent {label 'master'}
         stages{
             stage('git'){
                 steps{
@@ -13,5 +13,4 @@ pipeline{
             }
         }
 
-    }
 }
