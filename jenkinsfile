@@ -1,14 +1,17 @@
-node('master'){
-    stage('git'){
-        git 'https://github.com/pkgangisetti/game-of-life.git'
-}
-    stage('build'){
-        sh 'mvn package'
-    }
-    stage('test results'){
-        junit 'gameoflife-web/target/surefire-reports/*.xml'
-    }
-    stage('archive artifacts'){
-        archiveArtifacts artifacts: 'gameoflife-web/target/*.war', followSymlinks: false
+pipeline{
+    agent any{
+        stages{
+            stage('git'){
+                steps{
+                    git branch: 'declarativepipeline', url: https://github.com/pkgangisetti/game-of-life.git
+                }
+            }
+            stage('compile'){
+                steps{
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
     }
 }
