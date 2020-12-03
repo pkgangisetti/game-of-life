@@ -1,5 +1,5 @@
 pipeline{
-    agent none
+    agent {node{'master'}}
         stages{
             stage('git'){
                 agent{'master'}
