@@ -1,7 +1,7 @@
 pipeline{
     agent any
     triggers{
-        cron('30 * * * 1-5')
+        cron('H * * * 1-5')
     }
     parameters{
         string (name: 'Testresultspath', 
@@ -13,6 +13,9 @@ pipeline{
             defaultValue: 'gameoflife-web/target/*.war',
             description: 'This is archival Path'
         )
+        choice(choices: ['DEBUG','RELEASE'], 
+        description: 'BUILD TYPE', 
+        name: 'BUILD_TYPE')
         choice(
             name: 'BranchToBuild',
             choices: ['declarativepipeline', 'scriptedpipeline', 'master'],
@@ -25,9 +28,24 @@ pipeline{
                     git branch: "${params.BranchToBuild}", url: 'https://github.com/pkgangisetti/game-of-life.git'
                 }
             }
-            stage('compile'){
+            stage('debug build'){
+                when{
+                    allOf{
+                        expression {params.BUILD_TYPE == 'DEBUG'}
+                    }
+                }
                 steps{
                     sh 'mvn clean package'
+                }
+            }
+            stage('release build'){
+                when{
+                    allOf{
+                        expression {params.BUILD_TYPE == 'RELEASE'}
+                    }
+                }
+                steps{
+                    sh 'mvn clean install'
                 }
             }
             stage('postbuild'){
