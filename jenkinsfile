@@ -5,7 +5,7 @@ node('master'){
         parameters: [string(defaultValue:'', description: 'Enter the branch', name: 'BRANCH_NAME'),
         choice(choices: 'DEBUG\nRELEASE', description: 'BUILD TYPE', name: 'BUILD_TYPE')]
     }
-    properties([pipelineTriggers([cron('30 * * * 1-5')])])
+    properties([pipelinetriggers([cron('H * * * 1-5')])])
     
     stage('git'){
         git 'https://github.com/pkgangisetti/game-of-life.git'
@@ -17,12 +17,13 @@ node('master'){
         if (responses.BUILD_TYPE == 'RELEASE'){
             sh 'mvn clean install'
         }
+            stash name : 'golwar', includes: 'gameoflife-web/target/*.war'
 
         
     }
     stage('test results'){
         junit 'gameoflife-web/target/surefire-reports/*.xml'
-    }
+    
     stage('archive artifacts'){
         archiveArtifacts artifacts: 'gameoflife-web/target/*.war', followSymlinks: false
     }
