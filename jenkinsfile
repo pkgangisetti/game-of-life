@@ -2,7 +2,7 @@ node('master'){
     def responses = null
     stage('selecetion'){
         responses = input message: 'Enter branch and select build type',
-        parameters: [string(defaultValue:'', description: 'Enter the branch', name: 'BRANCH_NAME'),
+        parameters: [string(defaultValue: '', description: 'Enter the branch', name: 'BRANCH_NAME'),
         choice(choices: 'DEBUG\nRELEASE', description: 'BUILD TYPE', name: 'BUILD_TYPE')]
     }
     properties([pipelinetriggers([cron('H * * * 1-5')])])
