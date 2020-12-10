@@ -5,8 +5,9 @@ node('master'){
         parameters: [string(defaultValue: '', description: 'Enter the branch', name: 'BRANCH_NAME'),
         choice(choices: 'DEBUG\nRELEASE', description: 'BUILD TYPE', name: 'BUILD_TYPE')]
     }
-    properties([pipelinetriggers([cron('H * * * 1-5')])])
-    
+    triggers{
+    cron('H * * * 1-5')
+    }    
     stage('git'){
         git 'https://github.com/pkgangisetti/game-of-life.git'
 }
