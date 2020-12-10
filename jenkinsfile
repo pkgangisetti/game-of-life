@@ -28,3 +28,4 @@ node('master'){
         archiveArtifacts artifacts: 'gameoflife-web/target/*.war', followSymlinks: false
     }
 }
+}
