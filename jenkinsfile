@@ -2,7 +2,7 @@ node('master'){
     def responses = null
     stage('selecetion'){
         responses = input message: 'Enter branch and select build type',
-        parameters: [string(defaultValue:'master', description: 'Enter the branch', name: 'BRANCH_NAME'),
+        parameters: [string(defaultValue:'', description: 'Enter the branch', name: 'BRANCH_NAME'),
         choice(choices: 'DEBUG\nRELEASE', description: 'BUILD TYPE', name: 'BUILD_TYPE')]
     }
     properties([pipelinetriggers([cron('H * * * 1-5')])])
@@ -16,16 +16,14 @@ node('master'){
         }
         if (responses.BUILD_TYPE == 'RELEASE'){
             sh 'mvn clean install'
-        }
-            stash name : 'golwar', includes: 'gameoflife-web/target/*.war'
-
-        
+        } 
     }
     stage('test results'){
         junit 'gameoflife-web/target/surefire-reports/*.xml'
+    }
     
     stage('archive artifacts'){
         archiveArtifacts artifacts: 'gameoflife-web/target/*.war', followSymlinks: false
     }
 }
-}
+
